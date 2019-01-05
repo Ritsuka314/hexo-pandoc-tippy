@@ -57,13 +57,26 @@ pandoc:
     - toc:
 ```
 
-Also (Optionally) add to your `./_config.yml` file, if you want customized theme.
+### Customization
+
+Options to tippy can be specified in `./_config.yml` as:
+
+```
+tippy:
+  ...
+```
+
+A full list of all possible options can be found at [here](https://atomiks.github.io/tippyjs/all-options)
+
+Theming is also possible:
+
 ```
 tippy:
   theme_file: tippy-theme.css   # css file containing the theme, relative to blog root directory
   theme_name: honeybee          # theme name, see tippy docs
 ```
 
+Where `theme_name` is aliased to `theme` in the tippy options list.
 See tippy's instruction on [creating themes](https://atomiks.github.io/tippyjs/#creating-themes)
 
 The above steps only need to be done once.

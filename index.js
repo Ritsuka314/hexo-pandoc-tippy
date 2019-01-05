@@ -2,31 +2,50 @@
 
 // put js & css assets into ./public
 const fs = require('hexo-fs');
-
+const format = require('util').format;
 let config = hexo.config.tippy;
 
 let assets = [];
 
-const format = require('util').format;
-let theme_name = config ? config.theme_name : '';
-theme_name = theme_name ? theme_name : '';
+// generate css
+if (config instanceof Object && typeof config.theme_file !== 'undefined') {
+    var theme_file = config.theme_file;
+    assets.push({
+        path: 'css/tippy.css',
+        data: function(){
+            return fs.createReadStream(theme_file);
+        }});
+}
+
+delete config.theme_file;
+
+// default parameters
+let dflt = {
+arrow: true,
+animation: 'fade',
+distance: 15,
+arrowTransform: 'scale(2)',
+placement: 'top-start'}
+
+// merge default to user config
+for (var key in dflt) {
+  if (!(key in config))
+    config[key] = dflt[key];
+}
+
+// for backward compatibility
+// when 'theme_name' is defined
+if (!('theme' in config))
+  config['theme'] = config['theme_name'];
 
 // generate js script
 assets.push({
     path: 'js/attachTooltips.js',
     data: format(
         fs.readFileSync(__dirname+'/attachTooltips.js'),
-        theme_name
+        JSON.stringify(config)
     )
 });
-
-// generate css
-if (config instanceof Object && typeof config.theme_file !== 'undefined')
-    assets.push({
-        path: 'css/tippy.css',
-        data: function(){
-            return fs.createReadStream(config.theme_file);
-        }});
 
 // generate js & css
 hexo.extend.generator.register('tippy', function(){ return assets; });
