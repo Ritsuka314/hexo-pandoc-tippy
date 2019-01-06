@@ -5,6 +5,12 @@ def prepare(doc):
     doc.footnotes = []
     doc.footnoteNum = 1
 
+    doc.content.extend([
+      RawBlock("<script src='https://unpkg.com/tippy.js@2.0.2/dist/tippy.all.min.js'></script>"),
+      RawBlock("<script src='/js/attachTooltips.js'></script>"),
+      RawBlock("<link rel='stylesheet' href='/css/tippy.css'>")
+      ])
+
 
 def action(elem, doc):
     if isinstance(elem, Note):

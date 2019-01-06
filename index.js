@@ -49,14 +49,3 @@ assets.push({
 
 // generate js & css
 hexo.extend.generator.register('tippy', function(){ return assets; });
-
-// Add js/css resources to each post
-hexo.extend.filter.register('after_post_render', function(data) {
-    data.content =
-        "<script src='https://unpkg.com/tippy.js@2.0.2/dist/tippy.all.min.js'></script>\n" +
-        "<script src='/js/attachTooltips.js'></script>\n" +
-        "<link rel='stylesheet' href='/css/tippy.css'>\n" +
-        data.content;
-
-    return data;
-});
