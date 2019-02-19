@@ -15,9 +15,9 @@ if (config instanceof Object && typeof config.theme_file !== 'undefined') {
         data: function(){
             return fs.createReadStream(theme_file);
         }});
-}
 
-delete config.theme_file;
+    delete config.theme_file;
+}
 
 // default parameters
 let dflt = {
