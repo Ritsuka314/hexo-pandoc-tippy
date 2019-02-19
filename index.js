@@ -5,10 +5,13 @@ const fs = require('hexo-fs');
 const format = require('util').format;
 let config = hexo.config.tippy;
 
+if (!(config instanceof Object))
+    config = {}
+
 let assets = [];
 
 // generate css
-if (config instanceof Object && typeof config.theme_file !== 'undefined') {
+if (typeof config.theme_file !== 'undefined') {
     var theme_file = config.theme_file;
     assets.push({
         path: 'css/tippy.css',
