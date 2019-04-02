@@ -77,7 +77,9 @@ tippy:
 ```
 
 Where `theme_name` is aliased to `theme` in the tippy options list.
-See tippy's instruction on [creating themes](https://atomiks.github.io/tippyjs/#creating-themes)
+See tippy's instruction on [creating themes](https://atomiks.github.io/tippyjs/#themes)
+
+Notice that all relative paths are relative to hexo root, not blog root (`./source`).
 
 The above steps only need to be done once.
 After that,

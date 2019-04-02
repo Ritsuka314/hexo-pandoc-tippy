@@ -1,6 +1,6 @@
 {
   "name": "hexo-pandoc-tippy",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A hexo plugin to display markdown footnotes as tooltips, with support of rich text. This version works with pandoc.",
   "keywords": [
     "hexo",
