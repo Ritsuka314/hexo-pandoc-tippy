@@ -26,7 +26,7 @@ npm should have automaticlly installed the above packages for you.
 
 Further more, this plugin also requires:
 * [hexo](https://hexo.io/): 3.4.3
-* [hexo-renderer-pandoc](https://github.com/wzpan/hexo-renderer-pandoc): 0.2.0
+* [hexo-renderer-pandoc](https://github.com/wzpan/hexo-renderer-pandoc): 0.3.0 (versions below 0.3.0 do not support Hexo Tags well)
 * [pandoc](https://pandoc.org/): 1.19.2.1
 * [python](https://www.python.org/): I use 3.6.2, but 2.7 may also work.
 * [Panflute](http://scorreia.com/software/panflute/index.html#): 1.10.6
