@@ -52,3 +52,10 @@ assets.push({
 
 // generate js & css
 hexo.extend.generator.register('tippy', function(){ return assets; });
+
+// fix footnote references
+hexo.extend.filter.register("after_post_render", function(doc){
+  const fixFootnotes = require("./fixFootnotes.js");
+  fixFootnotes(doc)
+  return doc;
+})

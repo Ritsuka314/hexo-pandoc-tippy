@@ -15,7 +15,7 @@ This edition works with hexo-renderer-pandoc. Another edition named hexo-markdow
 
 ### Prerequisites
 
-Current version (0.1.0) works with the following packages.
+Current version (0.3.0) works with the following packages.
 Newer/older versions may be compatible, but there is no test to guarantee that.
 * [tippy.js](https://atomiks.github.io/tippyjs/): 2.0.2
 * [hexo-fs](https://github.com/hexojs/hexo-fs): 0.2.2
@@ -84,6 +84,42 @@ Notice that all relative paths are relative to hexo root, not blog root (`./sour
 The above steps only need to be done once.
 After that,
 run `hexo` to generate your blog and see the tooltips in effect.
+
+## Footnotes in Hexo Tags ##
+
+Here we are referring to [this sort of tags](https://hexo.io/docs/tag-plugins), not [post tags](https://hexo.io/docs/front-matter#Categories-amp-Tags)
+
+Due to how tags are rendered, content of each tag has its own "scope". When rendering a tag, Pandoc sees neither other tags contained in it, nor the context where it is contained. One implication of which is when using footnotes, one has to be aware of that a footnote reference and its definition has to be in the same tag. Even when one thing is in the tag nested in where the other is, is illegal.
+
+For example, the following is illegal.
+
+```
+{% tag %}
+[^1]
+{% tag %}
+[^1]: definition of footnote 1
+{% endtag%}
+{% endtag%}
+```
+
+The following is illegal, as all three definitions are in different scopes.
+
+```
+{% tag %}
+[^1]
+{% tag %}
+[^1]
+[^1]: definition of footnote 1
+{% endtag%}
+[^1]: definition of footnote 1
+{% endtag%}
+
+{% tag %}
+[^1]
+[^1]: definition of footnote 1
+{% endtag%}
+```
+
 
 ## Why Python Filter?
 Firstly, as hexo uses node.js, any user uses hexo must already have node.js installed. Thus I agree js is the most approperate language to use.

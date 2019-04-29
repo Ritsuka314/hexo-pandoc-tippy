@@ -5,16 +5,10 @@ def prepare(doc):
     doc.footnotes = []
     doc.footnoteNum = 1
 
-    doc.content.extend([
-      RawBlock("<script src='https://unpkg.com/tippy.js@2.0.2/dist/tippy.all.min.js'></script>"),
-      RawBlock("<script src='/js/attachTooltips.js'></script>"),
-      RawBlock("<link rel='stylesheet' href='/css/tippy.css'>")
-      ])
-
 
 def action(elem, doc):
     if isinstance(elem, Note):
-        doc.footnotes.append( 
+        doc.footnotes.append(
           Div(*elem.content, 
               attributes={ 
                   'class': 'tippy-tooltip', 
@@ -26,6 +20,18 @@ def action(elem, doc):
 def finalize(doc):
     doc.content.extend(doc.footnotes)
 
+    if doc.get_metadata("standalone", True):
+        doc.content.extend([
+            RawBlock("<script src='https://unpkg.com/tippy.js@2.0.2/dist/tippy.all.min.js'></script>"),
+            RawBlock("<script src='/js/attachTooltips.js'></script>"),
+            RawBlock("<link rel='stylesheet' href='/css/tippy.css'>")
+        ])
+    
+    # wraps everything around a scope
+    doc.content = [Div(
+        *doc.content,
+        classes=["fnScope"])]
+    
     del doc.footnotes, doc.footnoteNum
 
 
