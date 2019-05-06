@@ -5,6 +5,17 @@ module.exports = function (doc) {
   // cheerio seems to be wrapping input in <html><body></body></html>
   //console.log($.html());
   
+  // wrap top level in a scope
+  /*
+  const topLevelScope = $("<div class=\"fnScope\"></div>");
+  $("html>body").each((_, elem) => {
+    elem.parentNode = topLevelScope.get(0);
+  })
+  topLevelScope.get(0).parentNode = $("html>body").get(0);
+  */
+  $("html>body").html($("<div class=\"fnScope\"></div>").html($("html>body").children().map((_, elem) => $.html($(elem))).get().join("")));
+  //console.log($.html());
+  
   function forChildren (node, action) {return node.children().map((_, child) => action($(child))).get()}
   
   var nFn = 1;
