@@ -26,11 +26,17 @@ def finalize(doc):
             RawBlock("<script src='/js/attachTooltips.js'></script>"),
             RawBlock("<link rel='stylesheet' href='/css/tippy.css'>")
         ])
-    
-    # wraps everything around a scope
-    doc.content = [Div(
-        *doc.content,
-        classes=["fnScope"])]
+    else:
+      # only for embedded contents
+      # wrap everything around a scope
+      # 
+      # for standalone contents do this 
+      # in the after post render filter
+      # Pandoc only generate toc for
+      # headings in the top level
+      doc.content = [Div(
+          *doc.content,
+          classes=["fnScope"])]
     
     del doc.footnotes, doc.footnoteNum
 
