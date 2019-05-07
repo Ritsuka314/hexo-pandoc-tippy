@@ -7,13 +7,28 @@ module.exports = function (doc) {
   
   // wrap top level in a scope
   /*
+  // why this does not work
   const topLevelScope = $("<div class=\"fnScope\"></div>");
   $("html>body").each((_, elem) => {
     elem.parentNode = topLevelScope.get(0);
   })
   topLevelScope.get(0).parentNode = $("html>body").get(0);
   */
-  $("html>body").html($("<div class=\"fnScope\"></div>").html($("html>body").children().map((_, elem) => $.html($(elem))).get().join("")));
+  $("html>body").html(
+    $("<div class=\"fnScope\"></div>").html(
+      // cheerio puts things in <head></head>
+      // move them back to body
+      $("html>head").children()
+                    .map((_, elem) => 
+                         $.html($(elem)))
+                          .get()
+                          .join("") +
+      $("html>body").children()
+                    .map((_, elem) => 
+                         $.html($(elem)))
+                          .get()
+                          .join("")
+  ));
   //console.log($.html());
   
   function forChildren (node, action) {return node.children().map((_, child) => action($(child))).get()}
