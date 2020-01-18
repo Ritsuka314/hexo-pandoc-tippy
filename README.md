@@ -15,7 +15,7 @@ This edition works with hexo-renderer-pandoc. Another edition named hexo-markdow
 
 ### Prerequisites
 
-Current version (0.3.0) works with the following packages.
+Current version (0.4.1) works with the following packages.
 Newer/older versions may be compatible, but there is no test to guarantee that.
 * [tippy.js](https://atomiks.github.io/tippyjs/): 2.0.2
 * [hexo-fs](https://github.com/hexojs/hexo-fs): 0.2.2
