@@ -1,6 +1,7 @@
 module.exports = function (doc) {
   const cheerio = require('./node_modules/cheerio');
-    
+  const _ = require('lodash');
+
   // https://github.com/cheeriojs/cheerio/issues/866#issuecomment-482730997
   const load = cheerio.load;
 
@@ -16,13 +17,13 @@ module.exports = function (doc) {
   }
 
   function wrapHtml(fn) {
-    return function() {
+    return function () {
       const result = fn.apply(this, arguments);
       return typeof result === 'string' ? decode(result) : result;
     };
   }
 
-  cheerio.load = function() {
+  cheerio.load = function () {
     const instance = load.apply(this, arguments);
 
     instance.html = wrapHtml(instance.html);
@@ -30,12 +31,12 @@ module.exports = function (doc) {
 
     return instance;
   };
-  
+
   var $ = cheerio.load(doc.content);
-  
+
   // cheerio seems to be wrapping input in <html><body></body></html>
-  //console.log($.html());
-  
+  // console.log($.html());
+
   // wrap top level in a scope
   /*
   // why this does not work
@@ -46,28 +47,31 @@ module.exports = function (doc) {
   topLevelScope.get(0).parentNode = $("html>body").get(0);
   */
   $("html>body").html(
-    $("<div class=\"fnScope\"></div>").html(
+    $("<div class='fnScope'></div>").html(
       // cheerio puts things in <head></head>
       // move them back to body
       $("html>head").children()
-                    .map((_, elem) => 
-                         $.html($(elem)))
-                          .get()
-                          .join("") +
+        .map((_, elem) =>
+          $.html($(elem)))
+        .get()
+        .join("") +
       $("html>body").children()
-                    .map((_, elem) => 
-                         $.html($(elem)))
-                          .get()
-                          .join("")
-  ));
-  //console.log($.html());
-  
-  function forChildren (node, action) {return node.children().map((_, child) => action($(child))).get()}
-  
+        .map((_, elem) =>
+          $.html($(elem)))
+        .get()
+        .join("")
+    ));
+
+  // console.log($.html());
+
+  function forChildren(node, action) {
+    return node.children().map((_, child) => action($(child))).get()
+  }
+
   var nFn = 1;
   footnoteSection = null;
-  
-  function doFnSection (sec) {
+
+  function doFnSection(sec) {
     sec.remove();
     if (!footnoteSection) {
       footnoteSection = sec;
@@ -76,13 +80,13 @@ module.exports = function (doc) {
       sec.find(":root>ol>li").each((_, li) => {
         //console.log("=====li=====");
         //console.log(li.html());
-        
+
         footnoteSection.find(":root>ol").append(li);
       });
     }
   }
-  
-  function doScopeDiv (div) {
+
+  function doScopeDiv(div) {
     parent = div.parent().closest("div.fnScope");
     scope = parent.attr("scope");
     if (scope) scope += ".";
@@ -93,68 +97,103 @@ module.exports = function (doc) {
     else nth += 1;
     parent.attr("nth", nth);
     scope += nth;
-    
+
     div.attr("scope", scope);
   }
-  
-  function fixFootnotes (node) {
+
+  function fixFootnotes(node) {
     if (node.is("div.fnScope")) {
       // pre order
       doScopeDiv(node);
       forChildren(node, (node) => fixFootnotes(node));
-      
-      //console.log("=====div.fnScope=====");
-      //console.log("scope", node.attr("scope"));
-      //console.log(node.html());
-      
+
+      // console.log("=====div.fnScope=====");
+      // console.log("scope", node.attr("scope"));
+      // parent = node.parent().closest("div.fnScope");
+      // console.log('parent nth', parent.attr("nth"));
+      // console.log(node.html());
+
     } else if (node.is("section.footnotes")) {
       // post order
       forChildren(node, (node) => fixFootnotes(node));
+
+      // console.log("=====footnotes section=====");
+      // console.log(node.html());
+
       doFnSection(node);
-      
-      //console.log("=====footnotes section=====");
-      //console.log(sec.html());
+
     } else if (node.is("div.tippy-tooltip")) {
       scope = node.closest("div.fnScope").attr("scope");
       if (!scope) scope = "";
       else scope = "-" + scope;
-      
-      node.attr("id",  node.attr("id") + scope);
-      
+
+      node.attr("id", node.attr("id") + scope);
+
     } else if (node.is("a.footnote-ref")) {
       scope = node.closest("div.fnScope").attr("scope");
       if (!scope) scope = "";
       else scope = "-" + scope;
-      
+
       node.find("sup").text(nFn++);
-      node.attr("id",  node.attr("id") + scope);
+      node.attr("id", node.attr("id") + scope);
       node.attr("href", node.attr("href") + scope);
-      
+
     } else if (node.is("li[role=doc-endnote]")) {
-      scope = node.closest("section.footnotes").prev("div.fnScope").attr("scope");
+      let section = node.closest("section.footnotes");
+      let scope = (
+        // we wrapped nunjucks block in div
+        // then pandoc appended footnote section
+        section.prev('div.fnScope').attr("scope")
+        // for top level
+        // because we wrapped footnote section
+        // also in the div
+        || section.closest('div.fnScope').attr("scope"));
+
+      // console.log("=====doc-endnote=====");
+      // console.log("div", scope);
+
       if (!scope) scope = "";
       else scope = "-" + scope;
-      
-      node.attr("id",  node.attr("id") + scope);
-      
+
+      // console.log("scope", scope);
+
+      node.attr("id", node.attr("id") + scope);
+
       node.find("a.footnote-back").each((_, node) => {
         node = $(node);
         node.attr("href", node.attr("href") + scope);
       });
-      
+
     } else {
       forChildren(node, (node) => fixFootnotes(node));
     }
   }
-  
+
   fixFootnotes($("html>body"));
-  
-  //console.log(footnoteSection);
-  $("html>body>div").append(footnoteSection);
-  
+
+  if (footnoteSection) {
+    order = _($("html>body a.footnote-ref").toArray())
+      .map((ref) => ref.attribs.href)
+      .map((id, idx) => ({[id]: idx}))
+      .thru(_.spread(_.partial(_.assign, {})))
+      .value();
+
+    _(footnoteSection
+      .find('li[role=doc-endnote]')
+      .toArray())
+      .tap(note => note.remove)
+      .map(note => [note, order['#' + note.attribs.id]])
+      .sortBy(i => i[1])
+      .map(i => i[0])
+      .forEach(i => footnoteSection.find('ol').append(i));
+
+    // console.log(footnoteSection.html());
+    $("html>body").append(footnoteSection);
+  }
+
   doc.content = $("html>body").html();
   //doc.content = $.html();
-  
-  //console.log("=====modified=====");
-  //console.log(doc.content);
+
+  // console.log("=====modified=====");
+  // console.log(doc.content);
 }

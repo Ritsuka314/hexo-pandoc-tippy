@@ -15,7 +15,7 @@ This edition works with hexo-renderer-pandoc. Another edition named hexo-markdow
 
 ### Prerequisites
 
-Current version (0.3.0) works with the following packages.
+Current version (0.4.3) works with the following packages.
 Newer/older versions may be compatible, but there is no test to guarantee that.
 * [tippy.js](https://atomiks.github.io/tippyjs/): 2.0.2
 * [hexo-fs](https://github.com/hexojs/hexo-fs): 0.2.2
@@ -27,11 +27,13 @@ npm should have automaticlly installed the above packages for you.
 Further more, this plugin also requires:
 * [hexo](https://hexo.io/): 3.4.3
 * [hexo-renderer-pandoc](https://github.com/wzpan/hexo-renderer-pandoc): 0.3.0 (versions below 0.3.0 do not support Hexo Tags well)
-* [pandoc](https://pandoc.org/): 1.19.2.1
+* [pandoc](https://pandoc.org/): 2.9.11
 * [python](https://www.python.org/): I use 3.6.2, but 2.7 may also work.
 * [Panflute](http://scorreia.com/software/panflute/index.html#): 1.10.6
 
 You have to install the above yourself.
+
+Note: Pandoc 2.5.0 is known to cause problem^[https://github.com/RichardYan314/hexo-pandoc-tippy/issues/5#issuecomment-576097155]. 
 
 ### Installing
 
