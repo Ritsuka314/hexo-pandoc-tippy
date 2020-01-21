@@ -46,7 +46,7 @@ module.exports = function (doc) {
   topLevelScope.get(0).parentNode = $("html>body").get(0);
   */
   $("html>body").html(
-    $("<div></div>").html(
+    $("<div class=\"fnScope\"></div>").html(
       // cheerio puts things in <head></head>
       // move them back to body
       $("html>head").children()
