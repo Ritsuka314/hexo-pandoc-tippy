@@ -1,5 +1,5 @@
 module.exports = function (doc) {
-  const cheerio = require('./node_modules/cheerio');
+  const cheerio = require('cheerio');
   const _ = require('lodash');
 
   // https://github.com/cheeriojs/cheerio/issues/866#issuecomment-482730997
