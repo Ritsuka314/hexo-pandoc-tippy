@@ -15,23 +15,18 @@ This edition works with hexo-renderer-pandoc. Another edition named hexo-markdow
 
 ### Prerequisites
 
-Current version (0.4.4) works with the following packages.
-Newer/older versions may be compatible, but there is no test to guarantee that.
-* [tippy.js](https://atomiks.github.io/tippyjs/): 2.0.2
-* [hexo-fs](https://github.com/hexojs/hexo-fs): 0.2.2
-* [lodash](https://lodash.com/): 4.17.4
-
-If you installed this package as described in [Getting Started](#Getting Started),
-npm should have automaticlly installed the above packages for you.
-
-Further more, this plugin also requires:
-* [hexo](https://hexo.io/): 3.4.3
+Current version (0.4.5) requires:
+* [hexo](https://hexo.io/): 5.2.0
 * [hexo-renderer-pandoc](https://github.com/wzpan/hexo-renderer-pandoc): 0.3.0 (versions below 0.3.0 do not support Hexo Tags well)
-* [pandoc](https://pandoc.org/): 2.9.11
-* [python](https://www.python.org/): I use 3.6.2, but 2.7 may also work.
-* [Panflute](http://scorreia.com/software/panflute/index.html#): 1.10.6
+* [pandoc](https://pandoc.org/): 2.11.1.1
+* [python3](https://www.python.org/): I use 3.6.2
+* [Panflute](http://scorreia.com/software/panflute/index.html#): 2.0.5
 
 You have to install the above yourself.
+I personally prefer to create a python virtual environment.
+
+Note: Pandoc 2.11 changed its API. As such panflute 2.0.5 dropped support for pandoc 2.10 and below. See [palfute doc](https://github.com/sergiocorreia/panflute/blob/62837bbf630fdaaa6e5693a9d4b228f7d94e81c6/README.md#note-on-versions) and [this issue](https://github.com/sergiocorreia/panflute/issues/142).
+It does not matter to this plugin as long as the pandoc/panflute versions you use are compatible.
 
 Note: Pandoc 2.5.0 is known to cause problem^[https://github.com/RichardYan314/hexo-pandoc-tippy/issues/5#issuecomment-576097155]. 
 
@@ -176,3 +171,7 @@ See the [LICENSE.md](LICENSE.md) file for the full text.
 
 * HEXO
 * pandoc
+* panflute
+* tippy
+* cheerio
+* lodash
